@@ -9,6 +9,7 @@
       @select-topic="activateTopic"
     ></knowledge-base>
   </div>
+  <new-topic-modal @add-topic="addTopic"></new-topic-modal>
 </template>
 
 <script>
@@ -38,12 +39,22 @@ export default {
   provide() {
     return {
       topics: this.topics,
-      selectTopic: this.activateTopic
-    }
+      selectTopic: this.activateTopic,
+    };
   },
   methods: {
     activateTopic(topicId) {
       this.activeTopic = this.topics.find((topic) => topic.id === topicId);
+    },
+    addTopic(title, description, fullText) {
+      const newTopic = {
+        id: new Date().toISOString(),
+        title,
+        description,
+        fullText,
+      };
+
+      this.topics.unshift(newTopic)
     },
   },
 };
@@ -80,7 +91,6 @@ li {
   border: 1px solid #ccc;
   padding: 1rem;
   width: 15rem;
-  margin: 0 1rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -91,7 +101,7 @@ h2 {
   text-align: center;
 }
 
-button {
+button:not(.close) {
   font: inherit;
   border: 1px solid #c70053;
   background-color: #c70053;
@@ -101,9 +111,9 @@ button {
   cursor: pointer;
 }
 
-button:hover,
-button:focus,
-button:active {
+button:hover:not(.close) ,
+button:focus:not(.close) ,
+button:active:not(.close)  {
   background-color: #e24d8b;
   border-color: #e24d8b;
   outline: none;

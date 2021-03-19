@@ -5,7 +5,7 @@
         <h2>Select a Topic</h2>
       </div>
       <div class="col-md-4 text-right">
-        <button class="ml-auto">Add Topic</button>
+        <button class="ml-auto" data-toggle="modal" data-target="#myModal">Add Topic</button>
       </div>
     </div>
     <knowledge-grid></knowledge-grid>
