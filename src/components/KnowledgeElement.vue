@@ -1,5 +1,5 @@
 <template>
-  <li>
+  <li class="col-md-6 mx-1">
     <h3>{{ topicName }}</h3>
     <p>{{ description }}</p>
     <button @click="selectTopic(id)">Learn More</button>

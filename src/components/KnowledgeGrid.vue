@@ -1,5 +1,5 @@
 <template>
-  <ul>
+  <ul class="row">
     <knowledge-element
       v-for="topic in topics"
       :key="topic.id"
