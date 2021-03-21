@@ -13,20 +13,20 @@
 
         <!-- Modal body -->
         <div class="modal-body">
-            <form @submit.prevent="submit" id="newTopic">
-                <div class="form-group">
-                    <label for="">Title</label>
-                    <input type="text" v-model="title" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label for="">Description</label>
-                    <input type="text" v-model="description" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label for="">Full Text</label>
-                    <textarea class="form-control" v-model="fullText"></textarea>
-                </div>
-            </form>
+          <form @submit.prevent="submit" id="newTopic">
+            <div class="form-group">
+              <label for="">Title</label>
+              <input type="text" v-model="title" class="form-control" />
+            </div>
+            <div class="form-group">
+              <label for="">Description</label>
+              <input type="text" v-model="description" class="form-control" />
+            </div>
+            <div class="form-group">
+              <label for="">Full Text</label>
+              <textarea class="form-control" v-model="fullText"></textarea>
+            </div>
+          </form>
         </div>
 
         <!-- Modal footer -->
@@ -44,33 +44,35 @@
 </template>
 
 <script>
+import $ from 'jquery';
+
 export default {
-    emits: ['add-topic'],
-    data() {
-        return {
-            title: '',
-            description: '',
-            fullText: ''
-        };
+  emits: ['add-topic'],
+  data() {
+    return {
+      title: '',
+      description: '',
+      fullText: '',
+    };
+  },
+  methods: {
+    validate() {
+      if (this.title && this.description && this.fullText) {
+        return true;
+      }
+      return false;
     },
-    methods: {        
-        validate(){
-            if(this.title && this.description && this.fullText){
-                return true;
-            }
-            return false;
-        },
-        submit(){
-            if(this.validate()){
-                this.$emit('add-topic', this.title, this.description, this.fullText)
-                this.title = '';
-                this.description = '';
-                this.fullText = ''
-            }
-            else{
-                alert('please fill all fields')
-            }
-        }
-    }
+    submit() {
+      if (this.validate()) {
+        this.$emit('add-topic', this.title, this.description, this.fullText);
+        this.title = '';
+        this.description = '';
+        this.fullText = '';
+        $('#myModal').modal('hide')
+      } else {
+        alert('please fill all fields');
+      }
+    },
+  },
 };
 </script>
