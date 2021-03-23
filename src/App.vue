@@ -4,7 +4,9 @@
       :topic-title="activeTopic && activeTopic.title"
       :text="activeTopic && activeTopic.fullText"
     ></active-element>
+    <active-element v-if="isLoading" topic-title="Loading..."></active-element>
     <knowledge-base
+      v-else
       :topics="topics"
       @select-topic="activateTopic"
     ></knowledge-base>
@@ -16,24 +18,9 @@
 export default {
   data() {
     return {
-      topics: [
-        {
-          id: 'basics',
-          title: 'The Basics',
-          description: 'Core Vue basics you have to know',
-          fullText:
-            'Vue is a great framework and it has a couple of key concepts: Data binding, events, components and reactivity - that should tell you something!',
-        },
-        {
-          id: 'components',
-          title: 'Components',
-          description:
-            'Components are a core concept for building Vue UIs and apps',
-          fullText:
-            'With components, you can split logic (and markup) into separate building blocks and then combine those building blocks (and re-use them) to build powerful user interfaces.',
-        },
-      ],
+      topics: [],
       activeTopic: null,
+      isLoading: false,
     };
   },
   provide() {
@@ -53,9 +40,35 @@ export default {
         description,
         fullText,
       };
-
       this.topics.unshift(newTopic)
     },
+    fetchTopics() {
+      this.isLoading = true;
+      fetch(
+        'https://vue-inject-provide-69-default-rtdb.firebaseio.com/topics.json'
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          this.isLoading = false;
+          let myTopics = []
+          for (const id in data) {
+            myTopics.push({
+              id,
+              title: data[id].title,
+              description: data[id].description,
+              fullText: data[id].fullText,
+            });
+          }
+
+          this.topics.splice(0, this.topics.length,...myTopics);
+        })
+        .catch(() => {
+          this.isLoading = false;
+        });
+    },
+  },
+  mounted() {
+    this.fetchTopics();
   },
 };
 </script>
@@ -111,9 +124,9 @@ button:not(.close) {
   cursor: pointer;
 }
 
-button:hover:not(.close) ,
-button:focus:not(.close) ,
-button:active:not(.close)  {
+button:hover:not(.close),
+button:focus:not(.close),
+button:active:not(.close) {
   background-color: #e24d8b;
   border-color: #e24d8b;
   outline: none;

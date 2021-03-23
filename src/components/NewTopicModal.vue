@@ -64,6 +64,7 @@ export default {
     },
     submit() {
       if (this.validate()) {
+        this.saveToFirebase();
         this.$emit('add-topic', this.title, this.description, this.fullText);
         this.title = '';
         this.description = '';
@@ -73,6 +74,25 @@ export default {
         alert('please fill all fields');
       }
     },
+    saveToFirebase(){
+      return fetch('https://vue-inject-provide-69-default-rtdb.firebaseio.com/topics.json', {
+        method: 'post',
+        headers: {
+          'Content-Type': 'aplication/json'
+        },
+        body: JSON.stringify({
+          title: this.title, 
+          description: this.description, 
+          fullText: this.fullText
+        })
+      }).then(response => {
+        if(!response.ok){
+            throw new Error('Topic could not be saved.')
+        }
+      }).catch(err => {
+        alert(err.message)
+      })
+    }
   },
 };
 </script>
